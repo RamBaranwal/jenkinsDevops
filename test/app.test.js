@@ -1,5 +1,6 @@
 const request = require('supertest');
 const app = require('../index.js');
+const expectCookies = require('supertest/lib/cookies.js');
 
 describe('test the api', () => {
     test('test get method api', async () => {
@@ -7,5 +8,10 @@ describe('test the api', () => {
         expect(res.statusCode).toBe(200);
         expect(res.text.trim()).toBe(`<h1>Welcome to the app</h1>\n<h2>Name: Rohit Kumar</h2>`)
     })
-
+test(`test post method api`, async (req, res) => {
+    const res = await request(app).post('/add')
+    .send({num1:10,num2:15})
+    except(res.statusCode).toBe(200);
+    expect(res.body.result).toBe(25);
+})
 })

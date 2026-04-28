@@ -1,15 +1,26 @@
-const express = require('express')
+const request = require('supertest');
+const app = require('./app'); // your express app
 
-const app = express();
+describe('GET /add', () => {
 
-app.get('/', (req, res) => {
-    res.send('<h1>Welcome to the app</h1>\n<h2>Name: Rohit Kumar</h2>')
-})
+    it('should return sum of two numbers', async () => {
+        const res = await request(app)
+        .get('/add')
+        .send({ num1: 5, num2: 3 });
 
-module.exports = app;
+        expect(res.statusCode).toBe(200);
+        expect(res.body.result).toBe(8);
+    });
 
-if (require.main === module) {
-    app.listen(8000, () => {
-        console.log('Server is running on port 8000');
-    })
-}
+    it('should return error if inputs are not numbers', async () => {
+        const res = await request(app)
+        .get('/add')
+        .send({ num1: "a", num2: 3 });
+
+        expect(res.statusCode).toBe(400);
+        expect(res.body.error).toBe(
+        "Invalid input. Both num1 and num2 should be numbers."
+        );
+    });
+
+});
