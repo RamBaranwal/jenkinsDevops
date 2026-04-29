@@ -46,6 +46,17 @@ docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} .
 }
 }
 
+stage('Check Docker Daemon') {
+	steps {
+		sh '''
+		echo "--- Docker version ---"
+		docker --version || { echo "ERROR: docker binary not found or not in PATH"; exit 1; }
+		echo "--- Docker info ---"
+		docker info || { echo "ERROR: Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?"; exit 1; }
+		'''
+	}
+}
+
 stage('Push Docker Image') {
 steps {
 withCredentials([
