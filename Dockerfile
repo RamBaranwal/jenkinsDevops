@@ -6,6 +6,9 @@ COPY package.json ./
 
 RUN npm install
 
+# set container port to match app default
+ENV PORT=8080
+
 COPY . .
 
 EXPOSE 8080
